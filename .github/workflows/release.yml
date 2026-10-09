@@ -1,7 +1,9 @@
 # Publishes every release whose builds changed since it was last published (`always` to republish).
-# Dispatch only while this is a test repository; a real one would also run it on a schedule.
+# Daily; back-to-back changes cost one release, and a failed day is retried the next.
 name: release
 on:
+  schedule:
+    - cron: '17 7 * * *'
   workflow_dispatch:
     inputs:
       publish:
@@ -16,5 +18,5 @@ jobs:
   release:
     uses: ryan-morris/ffmpeg-builder/.github/workflows/build.yml@main
     with:
-      publish: ${{ inputs.publish }}
+      publish: ${{ inputs.publish || 'changed-only' }}
       engine: github:ryan-morris/ffmpeg-builder#main

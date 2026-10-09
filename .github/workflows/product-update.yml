@@ -1,11 +1,14 @@
 # The product's FFmpeg bumps: moves product/ffmpeg.version to the newest release of the same FFmpeg major.
 name: product-update
 on:
+  schedule:
+    - cron: '11 8 * * *'
   workflow_dispatch:
 
 permissions:
   contents: write
   pull-requests: write
+  actions: write
 
 jobs:
   bump:
@@ -13,4 +16,6 @@ jobs:
     with:
       pin-file: product/ffmpeg.version
       target: linux-x64-lgplv3
+      ci-workflow: product.yml
+      automerge: true
       engine: github:ryan-morris/ffmpeg-builder#main

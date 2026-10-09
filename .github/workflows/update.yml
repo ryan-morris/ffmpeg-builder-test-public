@@ -1,16 +1,20 @@
-# Lock updates: one PR with the update summary. UPDATE_TOKEN (optional) makes its pushes run CI.
+# Lock updates: one PR with the update summary, merged once CI (started by the workflow) passes.
 name: update
 on:
+  schedule:
+    - cron: '41 5 * * *'
   workflow_dispatch:
 
 permissions:
   contents: write
   pull-requests: write
+  actions: write
 
 jobs:
   update:
     uses: ryan-morris/ffmpeg-builder/.github/workflows/update.yml@main
     with:
+      automerge: true
       engine: github:ryan-morris/ffmpeg-builder#main
     secrets:
       token: ${{ secrets.UPDATE_TOKEN }}
