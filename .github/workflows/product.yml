@@ -22,7 +22,7 @@ jobs:
       - name: install the engine
         env:
           ENGINE: github:ryan-morris/ffmpeg-builder#main
-        run: npm install --global "${ENGINE}"
+        run: npm install --global "$(npm pack --silent "${ENGINE}" | tail -1)"
       - name: fetch the pinned build
         env:
           GH_TOKEN: ${{ github.token }}
