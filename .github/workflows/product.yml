@@ -1,0 +1,35 @@
+# A product that uses a published build: fetches the pinned release and runs it.
+name: product
+on:
+  pull_request:
+    paths: [product/**]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: install the engine
+        env:
+          ENGINE: github:ryan-morris/ffmpeg-builder#main
+        run: npm install --global "${ENGINE}"
+      - name: fetch the pinned build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: ffmpeg-build fetch product/ffmpeg.version --target linux-x64-lgplv3 --dev --out vendor/ffmpeg
+      - name: run it
+        run: |
+          ffmpeg="$(find vendor/ffmpeg -type f -name ffmpeg | head -1)"
+          "${ffmpeg}" -hide_banner -version
+          "${ffmpeg}" -hide_banner -loglevel error -f lavfi -i testsrc2=d=1 -f null -
+          ls vendor/ffmpeg

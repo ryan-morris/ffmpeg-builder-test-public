@@ -1,0 +1,20 @@
+# Publishes every release whose builds changed since it was last published (`always` to republish).
+# Dispatch only while this is a test repository; a real one would also run it on a schedule.
+name: release
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        type: choice
+        options: [changed-only, always]
+        default: changed-only
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    uses: ryan-morris/ffmpeg-builder/.github/workflows/build.yml@main
+    with:
+      publish: ${{ inputs.publish }}
+      engine: github:ryan-morris/ffmpeg-builder#main

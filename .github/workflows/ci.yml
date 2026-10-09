@@ -1,0 +1,15 @@
+# Pull requests: build what changed, publish nothing.
+name: ci
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    uses: ryan-morris/ffmpeg-builder/.github/workflows/build.yml@main
+    with:
+      publish: never
+      engine: github:ryan-morris/ffmpeg-builder#main

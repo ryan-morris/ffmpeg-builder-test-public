@@ -1,0 +1,16 @@
+# The product's FFmpeg bumps: moves product/ffmpeg.version to the newest release of the same FFmpeg major.
+name: product-update
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  bump:
+    uses: ryan-morris/ffmpeg-builder/.github/workflows/fetch-update.yml@main
+    with:
+      pin-file: product/ffmpeg.version
+      target: linux-x64-lgplv3
+      engine: github:ryan-morris/ffmpeg-builder#main
