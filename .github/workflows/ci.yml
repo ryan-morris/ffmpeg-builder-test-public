@@ -7,6 +7,7 @@ on:
 # write although nothing is published: GitHub won't start a run whose called workflow has a job asking for more
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   build:
@@ -14,3 +15,6 @@ jobs:
     with:
       publish: never
       engine: github:ryan-morris/ffmpeg-builder#main
+  merge:
+    needs: build
+    uses: ryan-morris/ffmpeg-builder/.github/workflows/automerge.yml@main

@@ -3,10 +3,12 @@ name: product
 on:
   pull_request:
     paths: [product/**]
-  workflow_dispatch:
+  workflow_dispatch: # product-update starts it on its PR's branch
 
+# write: the last job merges the product-update PR it tested
 permissions:
-  contents: read
+  contents: write
+  pull-requests: write
 
 jobs:
   test:
@@ -33,3 +35,6 @@ jobs:
           "${ffmpeg}" -hide_banner -version
           "${ffmpeg}" -hide_banner -loglevel error -f lavfi -i testsrc2=d=1 -f null -
           ls vendor/ffmpeg
+  merge:
+    needs: test
+    uses: ryan-morris/ffmpeg-builder/.github/workflows/automerge.yml@main
