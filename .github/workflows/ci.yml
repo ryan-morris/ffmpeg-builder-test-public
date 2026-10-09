@@ -4,8 +4,9 @@ on:
   pull_request:
   workflow_dispatch:
 
+# write although nothing is published: GitHub won't start a run whose called workflow has a job asking for more
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
